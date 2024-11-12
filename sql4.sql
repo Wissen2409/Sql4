@@ -574,17 +574,72 @@ END
 
 -- Bir Store Procedure Yazalım 
 
+
+-- PROCEDURE yerine proc yazılabilir!!
 create PROCEDURE SP_First
 as 
 BEGIN
-
 	select * from Product
 END
 
 -- Yazdığımız Store Procedure'ü çalıştıralım
 
-execute SP_First
+-- çalıştırma aşamasında execute yada exec
+
+exec SP_First
 
 
+-- Yazılan SP'i güncellemek isterseniz
+alter proc SP_First
+AS
+BEGIN
+select product_name from Product
+END
 
+-- tekrar çalıştıralım
+exec SP_First
+
+
+-- Int tipinde parametre alan Procedure
+create PROCEDURE SP_GetByProductId
+(
+  @productId int
+)
+AS
+BEGIN
+
+   select * from Product where product_id=@productId
+END
+
+-- çağıralım 
+
+-- exec yada execute demeden de procedurleri çalıştırabilirsiniz!!
+SP_GetByProductId 5
+-- 5 değeri, prosedürümüze parametre olarak gönderilmiştir!!!
+
+-- Daha okunaklı diğer bir yöntem de, parametre adını yazıp göndermektir.
+
+SP_GetByProductId @productId=9
+
+-- iki tane parametre alan procedur!!!
+
+alter proc SP_Product
+(
+
+	@categoryId int,
+	@price money
+)
+as
+BEGIN
+
+	select * from Product where category_id=@categoryId and price<@price
+END
+
+-- çalıştıralım 
+
+-- Store procedürlere parametre gönderirken, birden çok paarametre gönderiyorsanız parametreleri virgül ile ayırabilirsiniz!!
+SP_Product 1,150
+
+-- Diğer bir yöntem de, parametre gönderirken parametrelerin adını yazmaktır!!
+SP_Product @categoryId=1,@price=150
 
